@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy } from "react";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import NoMatch from "./components/NoMatch";
+import UseReducerTailoredPage from "./components/UseReducerTailoredPage";
+import PreLoader from "./components/PreLoader";
+import "./App.css";
+
+export const appRoutes = [
+  {
+    path: "/",
+    layout: lazy(() => import("./components/Layout")),
+    component: lazy(() => import("./components/UseReducerTailoredPage")),
+  },
+  {
+    path: "/CustomHookTailoredPage",
+    layout: lazy(() => import("./components/Layout")),
+    component: lazy(() => import("./components/CustomHookTailoredPage")),
+  }
+];
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {appRoutes?.map((appRoute) => {
+          const Layout = appRoute.layout
+          const Component = appRoute.component;
+
+          return (
+            <Route
+              path={appRoute.path}
+              element={
+                <React.Suspense fallback={<PreLoader />}>
+                  <Layout><Component /></Layout>
+                  
+                </React.Suspense>
+              }
+              key={appRoute.path}
+            />
+          );
+        })}
+        <Route path="/" element={<UseReducerTailoredPage />} />
+        <Route path="404" element={<NoMatch homeRoute="/"/>} />
+        <Route path="*" element={<NoMatch homeRoute="/" />} />
+      </Routes>
+    </Router>
   );
 }
 
