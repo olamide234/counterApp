@@ -5,15 +5,17 @@
 }
 
 html {
-  font-family: "Public-Sans", san-serif;
+  font-family: "Inter", san-serif;
   font-size: 16px;
-}
-body {
-  width: 100%;
-  background-color: hsl(140, 11%, 89%);
+  line-height: 1.5;
 }
 
-/* VARIABLES */
+body {
+  width: 100%;
+  background-color: var(--gray);
+  /* hsl(140, 11%, 89%); */
+}
+
 :root {
   --dark-blue: hsl(231, 100%, 3%);
   --lime-green: hsl(136, 65%, 51%);
@@ -22,9 +24,195 @@ body {
   --light-grayish-blue: hsl(220, 16%, 96%);
   --very-light-gray: hsl(0, 0%, 98%);
   --white: hsl(0, 0%, 100%);
+
+  --gray: #f3f3f3;
 }
+
+/* VARIABLES */
 
 /* UTILITY CLASSES */
 .u-mb-small {
   margin-bottom: 1rem;
+}
+.check {
+  display: None;
+}
+.hamburger {
+  display: None;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 6rem;
+}
+.nav-ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-ul li {
+  list-style: none;
+  margin: 0 1.5rem;
+  text-decoration: none;
+}
+li a {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--grayish-blue);
+  padding-bottom: 1.4rem;
+  position: relative;
+}
+li a:hover,
+.currentLocation {
+  color: var(--dark-blue);
+  font-weight: 500;
+}
+.nav-ul li a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0.3rem;
+  background: linear-gradient(to right, var(--lime-green), var(--bright-cyan));
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: all 0.3s;
+}
+.nav-ul li a:hover::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+.full_page {
+  padding: 0 2% 7% 2%;
+}
+.main{
+  position: relative;
+}
+.upper_division_content {
+  height: 62vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upper_division_content button {
+  border: 1px solid rgba(3, 3, 3, 0.2);
+  transition: 0.3s;
+  border-radius: 50%;
+  font-size: 2.5em;
+  padding: 0 6px;
+  margin: 0 0.4em 0.4em 0.4em;
+}
+.addSvg {
+  margin-top: 6px;
+}
+.upper_division_content button:hover {
+  border: 1px solid rgba(3, 3, 3, 0.8);
+}
+.displayed_no {
+  font-size: 15rem;
+}
+.lower_division {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.lower_division_content p {
+  letter-spacing: 2px;
+  margin: 0;
+}
+.remains {
+  font-size: 3rem;
+}
+.navigation {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.navigation_content,
+.lower_division_content {
+  width: 10rem;
+}
+.navigation_content button {
+  background-color: inherit;
+  border: none;
+  width: 32px;
+  height: 32px;
+  margin: 0 0.5em;
+  display: inline;
+  padding: 4px;
+  transition: transform 0.3s;
+}
+.navigation_content button:hover {
+  transform: scale(1.5);
+}
+
+/* SLIDE MENU WHEN HAMBURGER IS CLICKED */
+#toggle:checked ~ .nav-ul {
+  transform: translateY(0%);
+}
+#toggle:checked ~ .hamburger {
+  border: 1px solid red;
+  border-radius: 0.3rem;
+  padding: 0.4rem;
+}
+
+@media screen and (max-width: 650px) {
+  .hamburger {
+    display: inline-block;
+    position: absolute;
+    top: 2rem;
+    right: 8%;
+    cursor: pointer;
+  }
+  .hamburger .menu {
+    width: 3rem;
+    border-radius: 0%;
+    margin: 0;
+    height: 2rem;
+  }
+  .nav-ul {
+    flex-direction: column;
+    position: absolute;
+    width: 60%;
+    right: 20%;
+    padding: 1rem 0;
+    margin-top: 6rem;
+    background-color: white;
+    border: 1px solid hsl(137, 47%, 34%);
+    border-radius: 0.3rem;
+    transform: translateY(-200%);
+    transition: all 0.5s;
+    z-index: 999;
+  }
+  .nav-ul li {
+    padding: 1rem 0;
+    font-size: 1.6rem;
+  }
+  .nav-ul a:hover {
+    border-bottom: none;
+    color: black;
+  }
+  .nav-ul li a:hover::before {
+    opacity: 0;
+  }
+
+  /* SLIDE MENU WHEN HAMBURGER IS CLICKED */
+  #toggle:checked ~ .nav-ul {
+    transform: translateY(0%);
+  }
+  #toggle:checked ~ .hamburger {
+    border: 1px solid red;
+    border-radius: 0.3rem;
+    padding: 0.4rem;
+  }
+}
+@media screen and (max-width: 426px) {
+  .hamburger .menu {
+    width: 2rem;
+  }
 }

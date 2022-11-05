@@ -9,17 +9,16 @@ export default function Layout({ children }) {
     <div className="container">
       <div>
         <nav>
-          <div className="logo gradient__text">OLAMZ</div>
           <label htmlFor="toggle" className="hamburger">
             <img src="assets/icon-hamburger.svg" alt="hamburger-icon" />
           </label>
           <input type="checkbox" className="check" id="toggle"></input>
           <ul className="nav-ul" id="nav-ul">
             <li className="nav-li">
-              <a className ={(pathName ==='/') && 'currentLocation'} href="/">Home</a>
+              <a className ={(pathName ==='/') && 'currentLocation'} href="/">UseReducer</a>
             </li> 
             <li className="nav-li">
-              <a className ={(pathName ==='/users') && 'currentLocation'} href="/users">Users</a>
+              <a className ={(pathName ==='/CustomHookTailoredPage') && 'currentLocation'} href="/CustomHookTailoredPage">CustomHook</a>
             </li>
           </ul>
         </nav>
