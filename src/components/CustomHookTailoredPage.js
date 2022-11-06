@@ -6,7 +6,7 @@ import { GoPlus } from "react-icons/go";
 import { HiMinus } from "react-icons/hi";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-export default function CustomHookTailoredPage() {
+export default function UseReducerTailoredPage() {
   const [openModal, setOpenModal] = useState(false);
   const [contentDisplay, setContentDisplay] = useState({
     homeDisplay: false,
@@ -137,7 +137,19 @@ export default function CustomHookTailoredPage() {
                     <button className="reset_action ">Yes</button>
                   </div>
                   <div className="button_text">
-                    <button className="reset_action ">Cancel</button>
+                    <button
+                      className="reset_action"
+                      onClick={() => {
+                        setOpenModal(false);
+                        setContentDisplay({
+                          homeDisplay: false,
+                          settingDisplay: false,
+                          resetDisplay: false,
+                        });
+                      }}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               )}

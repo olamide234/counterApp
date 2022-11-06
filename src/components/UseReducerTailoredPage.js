@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { MdSettings } from "react-icons/md";
 import { GrPowerReset } from "react-icons/gr";
 import { AiFillExclamationCircle } from "react-icons/ai";
@@ -6,13 +6,71 @@ import { GoPlus } from "react-icons/go";
 import { HiMinus } from "react-icons/hi";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-export default function UseReducerTailoredPage() {
+export default function CustomHookTailoredPage() {
+  const initialData = {
+    counter: 0,
+    maximum: 8,
+    limitActive: false,
+  };
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "RESET":
+        return initialData;
+      case "INCREMENT":
+        return {
+          ...state,
+          counter: parseInt(state.counter) + 1,
+          maximum: parseInt(state.maximum) - 1,
+        };
+      case "DECREMENT":
+        if (parseInt(state.counter) === 0) {
+          return state;
+        } else {
+          return {
+            ...state,
+            counter: parseInt(state.counter) - 1,
+            maximum: parseInt(state.maximum) + 1,
+          };
+        }
+      case "SETVALUE":
+        return { ...state, counter: action.newValue };
+      case "SETMAXIMUM":
+        return { ...state, maximum: action.newMaximum };
+      case "ACTIVATE_LIMIT":
+        return { ...state, limitActive: action.newLimit };
+      default:
+        return state;
+    }
+  };
+
+  const [data, dispatch] = useReducer(reducer, initialData);
   const [openModal, setOpenModal] = useState(false);
   const [contentDisplay, setContentDisplay] = useState({
     homeDisplay: false,
     settingDisplay: false,
     resetDisplay: false,
   });
+
+  const handleReset = () => {
+    dispatch({ type: "RESET" });
+  };
+  const handleIncrement = () => {
+    dispatch({ type: "INCREMENT" });
+  };
+  const handleDecrement = () => {
+    dispatch({ type: "DECREMENT" });
+  };
+  const handleSetValue = (value) => {
+    dispatch({ type: "SETVALUE", newValue: value });
+  };
+  const handleSetMaximum = (value) => {
+    dispatch({ type: "SETMAXIMUM", newMaximum: value });
+  };
+  const handleActivateLimit = (value) => {
+    dispatch({ type: "ACTIVATE_LIMIT", newLimit: value });
+  };
+  console.log(data);
 
   return (
     <div className="full_page">
@@ -58,20 +116,26 @@ export default function UseReducerTailoredPage() {
       </div>
       <div className="main">
         <div className="upper_division_content">
-          <button>
-            <HiMinus size="36px" className="addSvg" />
-          </button>
-          <div className="displayed_no">1</div>
-          <button>
+          {data.counter != 0 ? (
+            <button onClick={handleDecrement}>
+              <HiMinus size="36px" className="addSvg" />
+            </button>
+          ) : (
+            <div style={{ width: "3.8rem" }}></div>
+          )}
+          <div className="displayed_no">{data.counter}</div>
+          <button onClick={handleIncrement}>
             <GoPlus size="36px" className="addSvg" />
           </button>
         </div>
-        <div className="lower_division">
-          <div className="lower_division_content">
-            <div className="remains">16</div>
-            <p>AVAILABLE</p>
+        {data.limitActive && (
+          <div className="lower_division">
+            <div className="lower_division_content">
+              <div className="remains">{data.maximum}</div>
+              <p>AVAILABLE</p>
+            </div>
           </div>
-        </div>
+        )}
         {openModal && (
           <div className="overlay">
             <div className="overlay_content">
@@ -103,15 +167,38 @@ export default function UseReducerTailoredPage() {
                   <div className="setting u-mb-small">
                     <div className="setting_box">
                       <h3 className="setting_text">Set Count = </h3>{" "}
-                      <input type="number" />
+                      <input
+                        type="number"
+                        onChange={(e) => handleSetValue(e.target.value)}
+                      />
                     </div>
                     <div className="setting_box">
-                      <div>
+                      <div className="setting_container">
                         <h3 className="setting_text">Limit Off / On</h3>
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            onChange={(e) => {
+                              console.log(e);
+                              handleActivateLimit(e.target.checked);
+                            }}
+                          />
+                          <span class="slider round"></span>
+                        </label>
                       </div>
-                      <div>
+                      <div
+                        className={
+                          !data.limitActive
+                            ? "setting_container disabled"
+                            : "setting_container"
+                        }
+                      >
                         <h3 className="setting_text">Maximum = </h3>
-                        <input type="number" />
+                        <input
+                          disabled={!data.limitActive}
+                          type="number"
+                          onChange={(e) => handleSetMaximum(e.target.value)}
+                        />
                       </div>
                     </div>
                   </div>
@@ -134,10 +221,24 @@ export default function UseReducerTailoredPage() {
                 <div className="text_area">
                   <h2 className="title">Reset Counter?</h2>
                   <div className="button_text">
-                    <button className="reset_action ">Yes</button>
+                    <button className="reset_action" onClick={handleReset}>
+                      Yes
+                    </button>
                   </div>
                   <div className="button_text">
-                    <button className="reset_action ">Cancel</button>
+                    <button
+                      className="reset_action"
+                      onClick={() => {
+                        setOpenModal(false);
+                        setContentDisplay({
+                          homeDisplay: false,
+                          settingDisplay: false,
+                          resetDisplay: false,
+                        });
+                      }}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               )}
