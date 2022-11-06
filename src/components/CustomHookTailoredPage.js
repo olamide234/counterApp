@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { GrPowerReset } from "react-icons/gr";
 import { AiFillExclamationCircle } from "react-icons/ai";

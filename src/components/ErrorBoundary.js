@@ -17,7 +17,24 @@ export default class ErrorBoundary extends Component {
   }
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong</h1>;
+      return (
+        <div style={{display: 'flex', justifyContent: 'center', padding:"25% "}}>
+        <div style={{textAlign: 'center'}}>
+          <h1>Something went wrong</h1>
+          <button
+            style={{
+              borderColor: "#778679",
+              backgroundColor: "#909877",
+              padding: "0.5rem 2rem",
+              borderRadius: "8px",
+              marginLeft: "1rem",
+            }}
+          >
+            <a style={{textDecoration: 'none'}} href="/">Go home</a>
+          </button>
+        </div>
+        </div>
+      );
     }
     return this.props.children;
   }
