@@ -16,6 +16,7 @@ body {
   /* hsl(140, 11%, 89%); */
 }
 
+/* VARIABLES */
 :root {
   --dark-blue: hsl(231, 100%, 3%);
   --lime-green: hsl(136, 65%, 51%);
@@ -26,9 +27,9 @@ body {
   --white: hsl(0, 0%, 100%);
 
   --gray: #f3f3f3;
+  --dark-title-color: #333;
+  --dark-border: rgba(0, 0, 0, 0.05);
 }
-
-/* VARIABLES */
 
 /* UTILITY CLASSES */
 .u-mb-small {
@@ -89,8 +90,35 @@ li a:hover,
 .full_page {
   padding: 0 2% 7% 2%;
 }
-.main{
+.main {
   position: relative;
+}
+.overlay {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  background-color: var(--gray);
+  top: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 37rem;
+}
+.overlay_content {
+  text-align: center;
+  color: var(--dark-title-color);
+  display: flex;
+  align-items: center;
+  width: 30%;
+  min-width: 18rem;
+  padding: 2%;
+  box-sizing: border-box;
+}
+.text_area {
+  width: 100%;
+}
+.title {
+  font-weight: 600;
+  font-size: 1.8rem;
 }
 .upper_division_content {
   height: 62vh;
@@ -102,7 +130,6 @@ li a:hover,
   border: 1px solid rgba(3, 3, 3, 0.2);
   transition: 0.3s;
   border-radius: 50%;
-  font-size: 2.5em;
   padding: 0 6px;
   margin: 0 0.4em 0.4em 0.4em;
 }
@@ -121,6 +148,9 @@ li a:hover,
   justify-content: center;
   align-content: center;
 }
+.lower_division_content {
+  width: 10rem;
+}
 .lower_division_content p {
   letter-spacing: 2px;
   margin: 0;
@@ -133,11 +163,13 @@ li a:hover,
   align-content: center;
   justify-content: center;
 }
-.navigation_content,
-.lower_division_content {
-  width: 10rem;
+.navigation_content {
+  display: flex;
+  justify-content: space-between;
 }
-.navigation_content button {
+
+.navigation_content button,
+.close_button {
   background-color: inherit;
   border: none;
   width: 32px;
@@ -147,8 +179,47 @@ li a:hover,
   padding: 4px;
   transition: transform 0.3s;
 }
+.reset_action {
+  background-color: inherit;
+  font-size: 1.2rem;
+  border: none;
+  margin: 0 0.5em;
+  display: inline;
+  padding: 4px;
+  transition: transform 0.3s;
+}
+.button_text {
+  margin: 2rem 0;
+}
+.setting_box {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--dark-border);
+  border-radius: 11px;
+  box-sizing: border-box;
+
+  line-height: 3.25;
+  margin-top: 1rem;
+}
+.setting_text {
+  font-weight: 500;
+  display: inline-block;
+}
+.setting_box input {
+  margin-left: 0.25rem;
+  width: 3.2rem;
+  height: 2rem;
+  font-size: 1.25rem;
+  padding-left: 6px;
+  border-radius: 4px;
+  color: #111;
+  border: none;
+}
 .navigation_content button:hover {
   transform: scale(1.5);
+}
+.close_button:hover,
+.reset_action:hover {
+  transform: scale(1.125);
 }
 
 /* SLIDE MENU WHEN HAMBURGER IS CLICKED */

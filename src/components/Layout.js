@@ -4,7 +4,6 @@ import {useLocation} from 'react-router-dom'
 export default function Layout({ children }) {
     const location = useLocation()
     const pathName = location.pathname
-    console.log(pathName === '/')
   return (
     <div className="container">
       <div>
