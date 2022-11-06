@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdSettings } from "react-icons/md";
 import { GrPowerReset } from "react-icons/gr";
 import { AiFillExclamationCircle } from "react-icons/ai";
@@ -6,13 +6,79 @@ import { GoPlus } from "react-icons/go";
 import { HiMinus } from "react-icons/hi";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-export default function UseReducerTailoredPage() {
+function useCounter(actionType, value) {
+  const initialData = {
+    counter: 0,
+    maximum: 8,
+    limitActive: false,
+  };
+
+  function y(appData) {
+    if (actionType === "RESET") {
+      return initialData;
+    } else if (actionType === "INCREMENT") {
+      return {
+        ...appData,
+        counter: parseInt(appData.counter) + 1,
+        maximum: parseInt(appData.maximum) - 1,
+      };
+    } else if (actionType === "DECREMENT") {
+      if (parseInt(appData.counter) === 0) {
+        return appData; 
+      } else {
+        return {
+          ...appData,
+          counter: parseInt(appData.counter) - 1,
+          maximum: parseInt(appData.maximum) + 1,
+        };
+      }
+    } else if (actionType === "SETVALUE") {
+      return { ...appData, counter: value };
+    } else if (actionType === "SETMAXIMUM") {
+      return { ...appData, maximum: value };
+    } else if (actionType === "ACTIVATE_LIMIT") {
+      return { ...appData, limitActive: value };
+    }
+  }
+
+  return y(initialData);
+}
+
+export default function CustomHookTailoredPage() {
   const [openModal, setOpenModal] = useState(false);
   const [contentDisplay, setContentDisplay] = useState({
     homeDisplay: false,
     settingDisplay: false,
     resetDisplay: false,
   });
+  const [action, setAction] = useState({ type: "", value: "" });
+  const data = useCounter(action.type, action.value);
+
+  const handleReset = () => {
+    setAction((prev) => ({ ...prev, type: "RESET" }));
+    setOpenModal(false);
+    setContentDisplay({
+      homeDisplay: false,
+      settingDisplay: false,
+      resetDisplay: false,
+    });
+  };
+  const handleIncrement = () => {
+    setAction((prev) => ({ ...prev, type: "INCREMENT" }));
+  };
+  const handleDecrement = () => {
+    setAction((prev) => ({ ...prev, type: "DECREMENT" }));
+  };
+  const handleSetValue = (value) => {
+    setAction({ type: "SETVALUE", value: value });
+  };
+  const handleSetMaximum = (value) => {
+    setAction({ type: "SETMAXIMUM", value: value });
+  };
+  const handleActivateLimit = (value) => {
+    setAction({ type: "ACTIVATE_LIMIT", value: value });
+  };
+  console.log(data);
 
   return (
     <div className="full_page">
@@ -58,20 +124,26 @@ export default function UseReducerTailoredPage() {
       </div>
       <div className="main">
         <div className="upper_division_content">
-          <button>
-            <HiMinus size="36px" className="addSvg" />
-          </button>
-          <div className="displayed_no">1</div>
-          <button>
+          {data.counter != 0 ? (
+            <button onClick={handleDecrement}>
+              <HiMinus size="36px" className="addSvg" />
+            </button>
+          ) : (
+            <div style={{ width: "3.8rem" }}></div>
+          )}
+          <div className="displayed_no">{data.counter}</div>
+          <button onClick={handleIncrement}>
             <GoPlus size="36px" className="addSvg" />
           </button>
         </div>
-        <div className="lower_division">
-          <div className="lower_division_content">
-            <div className="remains">16</div>
-            <p>AVAILABLE</p>
+        {data.limitActive && (
+          <div className="lower_division">
+            <div className="lower_division_content">
+              <div className="remains">{data.maximum}</div>
+              <p>AVAILABLE</p>
+            </div>
           </div>
-        </div>
+        )}
         {openModal && (
           <div className="overlay">
             <div className="overlay_content">
@@ -103,15 +175,38 @@ export default function UseReducerTailoredPage() {
                   <div className="setting u-mb-small">
                     <div className="setting_box">
                       <h3 className="setting_text">Set Count = </h3>{" "}
-                      <input type="number" />
+                      <input
+                        type="number"
+                        onChange={(e) => handleSetValue(e.target.value)}
+                      />
                     </div>
                     <div className="setting_box">
-                      <div>
+                      <div className="setting_container">
                         <h3 className="setting_text">Limit Off / On</h3>
+                        <label class="switch">
+                          <input
+                            type="checkbox"
+                            onChange={(e) => {
+                              console.log(e);
+                              handleActivateLimit(e.target.checked);
+                            }}
+                          />
+                          <span class="slider round"></span>
+                        </label>
                       </div>
-                      <div>
+                      <div
+                        className={
+                          !data.limitActive
+                            ? "setting_container disabled"
+                            : "setting_container"
+                        }
+                      >
                         <h3 className="setting_text">Maximum = </h3>
-                        <input type="number" />
+                        <input
+                          disabled={!data.limitActive}
+                          type="number"
+                          onChange={(e) => handleSetMaximum(e.target.value)}
+                        />
                       </div>
                     </div>
                   </div>
@@ -134,7 +229,9 @@ export default function UseReducerTailoredPage() {
                 <div className="text_area">
                   <h2 className="title">Reset Counter?</h2>
                   <div className="button_text">
-                    <button className="reset_action ">Yes</button>
+                    <button className="reset_action" onClick={handleReset}>
+                      Yes
+                    </button>
                   </div>
                   <div className="button_text">
                     <button

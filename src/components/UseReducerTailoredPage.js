@@ -54,6 +54,12 @@ export default function CustomHookTailoredPage() {
 
   const handleReset = () => {
     dispatch({ type: "RESET" });
+    setOpenModal(false);
+    setContentDisplay({
+      homeDisplay: false,
+      settingDisplay: false,
+      resetDisplay: false,
+    });
   };
   const handleIncrement = () => {
     dispatch({ type: "INCREMENT" });
