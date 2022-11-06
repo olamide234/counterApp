@@ -19,6 +19,9 @@ export default function Layout({ children }) {
             <li className="nav-li">
               <a className ={(pathName ==='/CustomHookTailoredPage') && 'currentLocation'} href="/CustomHookTailoredPage">CustomHook</a>
             </li>
+            <li className="nav-li">
+              <a  href="/errorPage">ErrorPage</a>
+            </li>
           </ul>
         </nav>
       </div>

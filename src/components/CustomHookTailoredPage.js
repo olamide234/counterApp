@@ -1,61 +1,60 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { MdSettings } from "react-icons/md";
 import { GrPowerReset } from "react-icons/gr";
 import { AiFillExclamationCircle } from "react-icons/ai";
 import { GoPlus } from "react-icons/go";
 import { HiMinus } from "react-icons/hi";
 import { RiCloseCircleLine } from "react-icons/ri";
+import useCounter from "./useCounter";
 
-function useCounter(actionType, value) {
-  const initialData = {
+export default function CustomHookTailoredPage() {
+  const initialState = {
     counter: 0,
     maximum: 8,
     limitActive: false,
   };
 
-  function y(appData) {
-    if (actionType === "RESET") {
-      return initialData;
-    } else if (actionType === "INCREMENT") {
-      return {
-        ...appData,
-        counter: parseInt(appData.counter) + 1,
-        maximum: parseInt(appData.maximum) - 1,
-      };
-    } else if (actionType === "DECREMENT") {
-      if (parseInt(appData.counter) === 0) {
-        return appData; 
-      } else {
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "RESET":
+        return initialState;
+      case "INCREMENT":
         return {
-          ...appData,
-          counter: parseInt(appData.counter) - 1,
-          maximum: parseInt(appData.maximum) + 1,
+          ...state,
+          counter: parseInt(state.counter) + 1,
+          maximum: parseInt(state.maximum) - 1,
         };
-      }
-    } else if (actionType === "SETVALUE") {
-      return { ...appData, counter: value };
-    } else if (actionType === "SETMAXIMUM") {
-      return { ...appData, maximum: value };
-    } else if (actionType === "ACTIVATE_LIMIT") {
-      return { ...appData, limitActive: value };
+      case "DECREMENT":
+        if (parseInt(state.counter) === 0) {
+          return state;
+        } else {
+          return {
+            ...state,
+            counter: parseInt(state.counter) - 1,
+            maximum: parseInt(state.maximum) + 1,
+          };
+        }
+      case "SETVALUE":
+        return { ...state, counter: action.newValue };
+      case "SETMAXIMUM":
+        return { ...state, maximum: action.newMaximum };
+      case "ACTIVATE_LIMIT":
+        return { ...state, limitActive: action.newLimit };
+      default:
+        return state;
     }
-  }
+  };
 
-  return y(initialData);
-}
-
-export default function CustomHookTailoredPage() {
   const [openModal, setOpenModal] = useState(false);
   const [contentDisplay, setContentDisplay] = useState({
     homeDisplay: false,
     settingDisplay: false,
     resetDisplay: false,
   });
-  const [action, setAction] = useState({ type: "", value: "" });
-  const data = useCounter(action.type, action.value);
+  const [data, dispatch] = useCounter(reducer, initialState);
 
   const handleReset = () => {
-    setAction((prev) => ({ ...prev, type: "RESET" }));
+    dispatch({ type: "RESET" });
     setOpenModal(false);
     setContentDisplay({
       homeDisplay: false,
@@ -64,21 +63,20 @@ export default function CustomHookTailoredPage() {
     });
   };
   const handleIncrement = () => {
-    setAction((prev) => ({ ...prev, type: "INCREMENT" }));
+    dispatch({ type: "INCREMENT" });
   };
   const handleDecrement = () => {
-    setAction((prev) => ({ ...prev, type: "DECREMENT" }));
+    dispatch({ type: "DECREMENT" });
   };
   const handleSetValue = (value) => {
-    setAction({ type: "SETVALUE", value: value });
+    dispatch({ type: "SETVALUE", newValue: value });
   };
   const handleSetMaximum = (value) => {
-    setAction({ type: "SETMAXIMUM", value: value });
+    dispatch({ type: "SETMAXIMUM", newMaximum: value });
   };
   const handleActivateLimit = (value) => {
-    setAction({ type: "ACTIVATE_LIMIT", value: value });
+    dispatch({ type: "ACTIVATE_LIMIT", newLimit: value });
   };
-  console.log(data);
 
   return (
     <div className="full_page">
@@ -124,22 +122,22 @@ export default function CustomHookTailoredPage() {
       </div>
       <div className="main">
         <div className="upper_division_content">
-          {data.counter != 0 ? (
-            <button onClick={handleDecrement}>
+          {data?.counter != 0 ? (
+            <button onClick={() => handleDecrement()}>
               <HiMinus size="36px" className="addSvg" />
             </button>
           ) : (
             <div style={{ width: "3.8rem" }}></div>
           )}
-          <div className="displayed_no">{data.counter}</div>
-          <button onClick={handleIncrement}>
+          <div className="displayed_no">{data?.counter}</div>
+          <button onClick={() => handleIncrement()}>
             <GoPlus size="36px" className="addSvg" />
           </button>
         </div>
-        {data.limitActive && (
+        {data?.limitActive && (
           <div className="lower_division">
             <div className="lower_division_content">
-              <div className="remains">{data.maximum}</div>
+              <div className="remains">{data?.maximum}</div>
               <p>AVAILABLE</p>
             </div>
           </div>
@@ -196,14 +194,14 @@ export default function CustomHookTailoredPage() {
                       </div>
                       <div
                         className={
-                          !data.limitActive
+                          !data?.limitActive
                             ? "setting_container disabled"
                             : "setting_container"
                         }
                       >
                         <h3 className="setting_text">Maximum = </h3>
                         <input
-                          disabled={!data.limitActive}
+                          disabled={!data?.limitActive}
                           type="number"
                           onChange={(e) => handleSetMaximum(e.target.value)}
                         />
@@ -229,7 +227,10 @@ export default function CustomHookTailoredPage() {
                 <div className="text_area">
                   <h2 className="title">Reset Counter?</h2>
                   <div className="button_text">
-                    <button className="reset_action" onClick={handleReset}>
+                    <button
+                      className="reset_action"
+                      onClick={() => handleReset()}
+                    >
                       Yes
                     </button>
                   </div>
