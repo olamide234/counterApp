@@ -18,7 +18,7 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{display: 'flex', justifyContent: 'center', padding:"25% "}}>
+        <div style={{display: 'flex', justifyContent: 'center', padding:"15% "}}>
         <div style={{textAlign: 'center'}}>
           <h1>Something went wrong</h1>
           <button
