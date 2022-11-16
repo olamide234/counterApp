@@ -138,7 +138,7 @@ export default function CustomHookTailoredPage() {
           <div className="lower_division">
             <div className="lower_division_content">
               <div className="remains">{data.maximum}</div>
-              <p>AVAILABLE</p>
+              <p>{ data.maximum < 0 ? 'LIMIT EXCEEDED' : 'AVAILABLE' }</p>
             </div>
           </div>
         )}
@@ -180,7 +180,24 @@ export default function CustomHookTailoredPage() {
                     </div>
                     <div className="setting_box">
                       <div className="setting_container">
-                        <h3 className="setting_text">Limit Off / On</h3>
+                        <h3 className="setting_text">
+                          Limit{" "}
+                          <span
+                            className={
+                              !data.limitActive && "limit_active_indicator"
+                            }
+                          >
+                            Off
+                          </span>{" "}
+                          /{" "}
+                          <span
+                            className={
+                              data.limitActive && "limit_active_indicator"
+                            }
+                          >
+                            On
+                          </span>
+                        </h3>
                         <label class="switch">
                           <input
                             type="checkbox"

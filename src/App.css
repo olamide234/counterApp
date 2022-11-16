@@ -222,6 +222,9 @@ li a:hover,
   color: #111;
   border: none;
 }
+.limit_active_indicator{
+  text-decoration: underline;
+}
 .navigation_content button:hover {
   transform: scale(1.5);
 }
