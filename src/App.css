@@ -158,6 +158,14 @@ li a:hover,
 .remains {
   font-size: 3rem;
 }
+.blink{
+  animation: blinking 1.5s infinite;
+}
+@keyframes blinking{
+  50% {
+    opacity: 0;
+    }
+}
 .navigation {
   display: flex;
   align-content: center;

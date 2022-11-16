@@ -138,7 +138,7 @@ export default function CustomHookTailoredPage() {
           <div className="lower_division">
             <div className="lower_division_content">
               <div className="remains">{data.maximum}</div>
-              <p>{ data.maximum < 0 ? 'LIMIT EXCEEDED' : 'AVAILABLE' }</p>
+              {data.maximum < 0 ? <p className='blink'> LIMIT EXCEEDED</p> : <p> AVAILABLE</p>}
             </div>
           </div>
         )}
